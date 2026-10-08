@@ -1,6 +1,6 @@
 from fetch import fetch_submissions
 from db import connect, create_tables, save_submissions
-from analysis import topic_stats
+from analysis import topic_stats, weakness_scores
 
 handle = input("Codeforces handle: ").strip()
 subs = fetch_submissions(handle)
@@ -17,4 +17,7 @@ for tag, subs_count, accepted, tried, solved in topic_stats(conn):
     rate = accepted * 100 / subs_count
     print(f"{tag}: {subs_count} | {accepted} | {rate:.0f}% | {solved}/{tried}")
 
+print("\nWeakest topics (higher = weaker)")
+for tag, score, count in weakness_scores(conn)[:5]:
+    print(f"{tag}: score {score:.2f} ({count} submissions)")
 conn.close()
